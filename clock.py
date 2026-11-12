@@ -8,55 +8,105 @@ def update_clock():
     date_string = strftime("%B %d, %Y")
 
     timelabel.config(text=time_string)
-    daylabel.config(text=day_string)
+    timelabel_shadow.config(text=time_string)
+    daylabel.config(text=day_string.upper())
     datelabel.config(text=date_string)
 
     window.after(1000, update_clock)
 
 
-window = tk.Tk()
-window.title("Digital Clock")
-window.configure(bg="#0b1020")
-window.geometry("420x320")
-window.resizable(False, False)
+def build_clock():
+    
+    global window, timelabel, timelabel_shadow, daylabel, datelabel
 
-# Center the window on the screen
-window.update_idletasks()
-screen_width = window.winfo_screenwidth()
-screen_height = window.winfo_screenheight()
-window_width = 420
-window_height = 320
-x = (screen_width // 2) - (window_width // 2)
-y = (screen_height // 2) - (window_height // 2)
-window.geometry(f"{window_width}x{window_height}+{x}+{y}")
+    window = tk.Tk()
+    window.title("Liquid Glass Clock")
+    window.configure(bg="#08111f")
+    window.resizable(False, False)
 
-# Labels
-timelabel = tk.Label(
-    window,
-    text="",
-    font=("Segoe UI", 42, "bold"),
-    fg="#7ef9a8",
-    bg="#0b1020",
-)
-timelabel.pack(pady=(30, 8))
+    window.update_idletasks()
+    screen_width = window.winfo_screenwidth()
+    screen_height = window.winfo_screenheight()
+    width = 470
+    height = 330
+    x = (screen_width // 2) - (width // 2)
+    y = (screen_height // 2) - (height // 2)
+    window.geometry(f"{width}x{height}+{x}+{y}")
 
-daylabel = tk.Label(
-    window,
-    text="",
-    font=("Segoe UI", 28),
-    fg="#67e8f9",
-    bg="#0b1020",
-)
-daylabel.pack(pady=6)
+    # Main liquid-glass panel
+    panel = tk.Frame(
+        window,
+        bg="#101827",
+        bd=0,
+        highlightbackground="#8b5cf6",
+        highlightthickness=1,
+        padx=30,
+        pady=20,
+    )
+    panel.pack(expand=True, fill="both", padx=18, pady=18)
 
-datelabel = tk.Label(
-    window,
-    text="",
-    font=("Segoe UI", 20),
-    fg="#d5d9ff",
-    bg="#0b1020",
-)
-datelabel.pack(pady=6)
+    # Soft blurred background glow effect using nested panels
+    glow = tk.Label(
+        panel,
+        bg="#1e293b",
+        bd=0,
+        padx=0,
+        pady=0,
+    )
+    glow.place(x=12, y=12, relwidth=1.0, relheight=1.0)
 
-update_clock()
-window.mainloop()
+    heading = tk.Label(
+        panel,
+        text="LOCAL TIME",
+        font=("Segoe UI", 10, "bold"),
+        fg="#cbd5e1",
+        bg="#101827",
+    )
+    heading.place(relx=0.5, y=18, anchor="n")
+
+    timelabel_shadow = tk.Label(
+        panel,
+        text="",
+        font=("Segoe UI", 42, "bold"),
+        fg="#4ade80",
+        bg="#101827",
+    )
+    timelabel_shadow.place(relx=0.5, y=82, anchor="n", x=4)
+
+    timelabel = tk.Label(
+        panel,
+        text="",
+        font=("Segoe UI", 42, "bold"),
+        fg="#f8fafc",
+        bg="#101827",
+    )
+    timelabel.place(relx=0.5, y=82, anchor="n")
+
+    divider = tk.Canvas(panel, width=230, height=2, bg="#101827", highlightthickness=0)
+    divider.create_line(0, 1, 230, 1, fill="#8b5cf6", width=2)
+    divider.place(relx=0.5, y=150, anchor="n")
+
+    daylabel = tk.Label(
+        panel,
+        text="",
+        font=("Segoe UI", 22, "bold"),
+        fg="#67e8f9",
+        bg="#101827",
+    )
+    daylabel.place(relx=0.5, y=185, anchor="n")
+
+    datelabel = tk.Label(
+        panel,
+        text="",
+        font=("Segoe UI", 15),
+        fg="#dfe7f5",
+        bg="#101827",
+    )
+    datelabel.place(relx=0.5, y=230, anchor="n")
+
+    update_clock()
+
+
+if __name__ == "__main__":
+    build_clock()
+    window.mainloop()
